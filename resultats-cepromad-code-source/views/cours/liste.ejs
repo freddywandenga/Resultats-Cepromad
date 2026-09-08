@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1>Cours (curriculum)</h1></div>
+
+<div class="tabs">
+  <% promotions.forEach(p => { %>
+    <a href="/admin/cours?promotion_id=<%= p.id %>" class="<%= String(promotionId)===String(p.id) ? 'active' : '' %>"><%= p.faculte_nom %> — <%= p.nom %></a>
+  <% }) %>
+</div>
+
+<% if (promotionId) { %>
+<div class="card">
+  <h3>Ajouter un cours</h3>
+  <form method="POST" action="/admin/cours" class="form-row">
+    <input type="hidden" name="promotion_id" value="<%= promotionId %>">
+    <div><label>Nom du cours</label><input type="text" name="nom" required></div>
+    <div><label>Crédits</label><input type="number" step="0.5" name="credits" value="5"></div>
+    <div style="align-self:end;"><button type="submit" class="btn">Ajouter</button></div>
+  </form>
+</div>
+
+<table>
+  <thead><tr><th>Cours</th><th>Crédits</th><th></th></tr></thead>
+  <tbody>
+    <% cours.forEach(c => { %>
+      <tr>
+        <td><%= c.nom %></td>
+        <td><%= c.credits %></td>
+        <td>
+          <form class="inline" method="POST" action="/admin/cours/<%= c.id %>?_method=DELETE" onsubmit="return confirm('Supprimer ce cours ?');">
+            <button class="btn btn-sm btn-danger" type="submit">Suppr.</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (cours.length === 0) { %><tr><td colspan="3">Aucun cours pour cette promotion.</td></tr><% } %>
+  </tbody>
+</table>
+<p style="color:var(--muted); font-size:0.85rem;">Total crédits : <strong><%= cours.reduce((s,c)=>s+c.credits,0) %></strong></p>
+<% } else { %>
+<p>Créez d'abord une <a href="/admin/facultes/promotions">promotion</a>.</p>
+<% } %>
+<%- include('../partials/footer') %>

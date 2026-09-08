@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion admin — Résultats Cepromad</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="login-page">
+    <div class="login-box">
+      <h1>🎓 Résultats Cepromad</h1>
+      <div class="sous-titre">Espace administration</div>
+      <% if (erreur) { %><div class="error-msg"><%= erreur %></div><% } %>
+      <form method="POST" action="/admin/login">
+        <label>Nom d'utilisateur</label>
+        <input type="text" name="nom_utilisateur" required autofocus>
+        <label>Mot de passe</label>
+        <input type="password" name="mot_de_passe" required>
+        <button type="submit" class="btn" style="width:100%;">Se connecter</button>
+      </form>
+      <p style="margin-top:16px;"><a href="/" style="font-size:0.82rem; color:var(--muted);">← Retour à la consultation des résultats</a></p>
+    </div>
+  </div>
+</body>
+</html>

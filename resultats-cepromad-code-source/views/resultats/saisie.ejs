@@ -1,0 +1,59 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1>Saisie des notes</h1></div>
+
+<div class="card">
+  <form method="GET" action="/admin/resultats/saisie" class="form-row">
+    <div>
+      <label>Promotion</label>
+      <select name="promotion_id" required onchange="this.form.submit()">
+        <option value="">—</option>
+        <% promotions.forEach(p => { %><option value="<%= p.id %>" <%= String(promotion_id)===String(p.id)?'selected':'' %>><%= p.faculte_nom %> — <%= p.nom %></option><% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Cours</label>
+      <select name="cours_id" required onchange="this.form.submit()">
+        <option value="">—</option>
+        <% cours.forEach(c => { %><option value="<%= c.id %>" <%= String(cours_id)===String(c.id)?'selected':'' %>><%= c.nom %> (<%= c.credits %> crédits)</option><% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Session</label>
+      <select name="session" onchange="this.form.submit()">
+        <option value="principale" <%= session==='principale'?'selected':'' %>>Principale</option>
+        <option value="rattrapage" <%= session==='rattrapage'?'selected':'' %>>Rattrapage</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+<% if (etudiants.length > 0) { %>
+<form method="POST" action="/admin/resultats/saisie">
+  <input type="hidden" name="promotion_id" value="<%= promotion_id %>">
+  <input type="hidden" name="cours_id" value="<%= cours_id %>">
+  <input type="hidden" name="session" value="<%= session %>">
+  <div class="card" style="max-width:200px;">
+    <label>Note sur (max)</label>
+    <input type="number" name="note_max" value="20" step="0.5">
+  </div>
+  <table>
+    <thead><tr><th>Matricule</th><th>Étudiant</th><th>Note</th></tr></thead>
+    <tbody>
+      <% etudiants.forEach(e => { %>
+        <tr>
+          <td><%= e.matricule %>
+            <input type="hidden" name="etudiant_ids" value="<%= e.id %>">
+          </td>
+          <td><%= e.nom %> <%= e.postnom %> <%= e.prenom %></td>
+          <td><input type="number" step="0.25" name="valeurs" value="<%= e.note !== null && e.note !== undefined ? e.note : '' %>" style="margin:0;"></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <br>
+  <button type="submit" class="btn">Enregistrer les notes</button>
+</form>
+<% } else if (promotion_id && cours_id) { %>
+  <p>Aucun étudiant inscrit dans cette promotion.</p>
+<% } %>
+<%- include('../partials/footer') %>

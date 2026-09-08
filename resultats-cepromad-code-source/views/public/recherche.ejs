@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Résultats — Université de Cepromad</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="public-page">
+    <div class="public-header">
+      <div class="ecusson">🎓</div>
+      <h1>UNIVERSITÉ DE CEPROMAD</h1>
+      <p>PORTAIL DE PUBLICATION DES RÉSULTATS</p>
+    </div>
+
+    <div class="public-card">
+      <% if (erreur) { %><div class="error-msg" style="text-align:center;"><%= erreur %></div><% } %>
+      <form method="POST" action="/">
+        <label>Numéro matricule</label>
+        <input type="text" name="matricule" placeholder="ex: CEP-2026-0001" required autofocus>
+        <label>Nom</label>
+        <input type="text" name="nom" placeholder="Votre nom de famille" required>
+        <button type="submit" class="btn" style="width:100%;">Consulter mes résultats</button>
+      </form>
+    </div>
+
+    <p style="color:#c7d2e8; font-size:0.78rem; margin-top:24px;">
+      <a href="/admin/login" style="color:#c7d2e8;">Espace administration →</a>
+    </p>
+  </div>
+</body>
+</html>

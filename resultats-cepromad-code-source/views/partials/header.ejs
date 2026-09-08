@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — Résultats Cepromad</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">🎓 Résultats Cepromad</div>
+      <div class="sous-logo">ESPACE ADMINISTRATION</div>
+      <div class="annee-active">Année : <strong><%= typeof anneeActive !== 'undefined' && anneeActive ? anneeActive.libelle : '' %></strong></div>
+      <nav>
+        <a href="/admin" class="<%= currentPath === '/' ? 'active' : '' %>">📊 Tableau de bord</a>
+        <a href="/admin/facultes" class="<%= currentPath.startsWith('/facultes') && !currentPath.startsWith('/facultes/promotions') ? 'active' : '' %>">🏛️ Facultés</a>
+        <a href="/admin/facultes/promotions" class="<%= currentPath.startsWith('/facultes/promotions') ? 'active' : '' %>">🏷️ Promotions</a>
+        <a href="/admin/etudiants" class="<%= currentPath.startsWith('/etudiants') ? 'active' : '' %>">🎓 Étudiants</a>
+        <a href="/admin/cours" class="<%= currentPath.startsWith('/cours') ? 'active' : '' %>">📘 Cours</a>
+        <a href="/admin/resultats/saisie" class="<%= currentPath.startsWith('/resultats/saisie') ? 'active' : '' %>">📝 Saisie des notes</a>
+        <a href="/admin/resultats/import" class="<%= currentPath.startsWith('/resultats/import') ? 'active' : '' %>">📥 Import Excel</a>
+        <a href="/admin/resultats/publication" class="<%= currentPath.startsWith('/resultats/publication') ? 'active' : '' %>">📢 Publication</a>
+        <a href="/admin/statistiques" class="<%= currentPath.startsWith('/statistiques') ? 'active' : '' %>">📈 Statistiques</a>
+        <a href="/admin/parametres" class="<%= currentPath.startsWith('/parametres') ? 'active' : '' %>">⚙️ Paramètres</a>
+      </nav>
+      <form action="/admin/logout" method="POST" class="logout-form">
+        <span><%= session.nomUtilisateur %></span>
+        <button type="submit">Déconnexion</button>
+      </form>
+    </aside>
+    <main class="content">

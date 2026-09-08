@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1><%= etudiant.id ? 'Modifier' : 'Nouvel' %> étudiant</h1></div>
+
+<div class="card">
+  <form method="POST" action="<%= etudiant.id ? '/admin/etudiants/' + etudiant.id + '?_method=PUT' : '/admin/etudiants' %>">
+    <% if (!etudiant.id) { %>
+      <label>Matricule (laisser vide pour génération automatique)</label>
+      <input type="text" name="matricule" placeholder="ex: CEP-2026-0001">
+    <% } %>
+    <div class="form-row">
+      <div><label>Nom</label><input type="text" name="nom" value="<%= etudiant.nom || '' %>" required></div>
+      <div><label>Post-nom</label><input type="text" name="postnom" value="<%= etudiant.postnom || '' %>"></div>
+      <div><label>Prénom</label><input type="text" name="prenom" value="<%= etudiant.prenom || '' %>"></div>
+    </div>
+    <label>Sexe</label>
+    <select name="sexe">
+      <option value="M" <%= etudiant.sexe === 'M' ? 'selected' : '' %>>Masculin</option>
+      <option value="F" <%= etudiant.sexe === 'F' ? 'selected' : '' %>>Féminin</option>
+    </select>
+    <label>Promotion</label>
+    <select name="promotion_id">
+      <option value="">— Aucune —</option>
+      <% promotions.forEach(p => { %>
+        <option value="<%= p.id %>" <%= String(promotionSelectionnee) === String(p.id) ? 'selected' : '' %>><%= p.faculte_nom %> — <%= p.nom %></option>
+      <% }) %>
+    </select>
+    <button type="submit" class="btn">Enregistrer</button>
+    <a href="/admin/etudiants" class="btn btn-secondary">Annuler</a>
+  </form>
+</div>
+<%- include('../partials/footer') %>

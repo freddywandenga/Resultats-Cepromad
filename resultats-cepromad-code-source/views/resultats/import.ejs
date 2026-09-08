@@ -1,0 +1,78 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1>Import Excel des résultats</h1></div>
+
+<div class="card">
+  <h3>Comment préparer le fichier ?</h3>
+  <p style="font-size:0.88rem; color:var(--muted);">
+    Fichier <strong>.xlsx</strong> ou <strong>.csv</strong> avec deux colonnes obligatoires en première ligne :
+    <code>matricule</code> et <code>note</code> (une colonne <code>note_max</code> est optionnelle, 20 par défaut).
+    Une ligne = un étudiant. Le cours et la session sont choisis ci-dessous pour tout le fichier.
+  </p>
+  <table style="max-width:400px;">
+    <thead><tr><th>matricule</th><th>note</th></tr></thead>
+    <tbody>
+      <tr><td>CEP-2026-0001</td><td>15</td></tr>
+      <tr><td>CEP-2026-0002</td><td>12.5</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <form method="POST" action="/admin/resultats/import" enctype="multipart/form-data" class="form-row">
+    <div>
+      <label>Promotion</label>
+      <select name="promotion_id" id="promotion_id" required>
+        <option value="">—</option>
+        <% promotions.forEach(p => { %><option value="<%= p.id %>"><%= p.faculte_nom %> — <%= p.nom %></option><% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Cours</label>
+      <select name="cours_id" id="cours_id" required>
+        <option value="">Choisir d'abord une promotion</option>
+      </select>
+    </div>
+    <div>
+      <label>Session</label>
+      <select name="session">
+        <option value="principale">Principale</option>
+        <option value="rattrapage">Rattrapage</option>
+      </select>
+    </div>
+    <div><label>Fichier (.xlsx / .csv)</label><input type="file" name="fichier" accept=".xlsx,.xls,.csv" required></div>
+    <div style="align-self:end;"><button type="submit" class="btn">Importer</button></div>
+  </form>
+</div>
+
+<% if (rapport) { %>
+  <div class="card">
+    <% if (rapport.erreur) { %>
+      <p class="error-msg"><%= rapport.erreur %></p>
+    <% } else { %>
+      <p class="success-msg"><%= rapport.importes %> résultat(s) importé(s) sur <%= rapport.total %> ligne(s).</p>
+      <% if (rapport.erreurs && rapport.erreurs.length > 0) { %>
+        <p><strong>Anomalies :</strong></p>
+        <ul>
+          <% rapport.erreurs.forEach(e => { %><li style="font-size:0.85rem; color:var(--danger);"><%= e %></li><% }) %>
+        </ul>
+      <% } %>
+    <% } %>
+  </div>
+<% } %>
+
+<script>
+  const coursTous = <%- JSON.stringify(coursTous) %>;
+  const selectPromotion = document.getElementById('promotion_id');
+  const selectCours = document.getElementById('cours_id');
+
+  function majCours() {
+    const promoId = selectPromotion.value;
+    const filtres = coursTous.filter(c => String(c.promotion_id) === String(promoId));
+    selectCours.innerHTML = filtres.length
+      ? filtres.map(c => `<option value="${c.id}">${c.nom} (${c.credits} crédits)</option>`).join('')
+      : '<option value="">Aucun cours pour cette promotion</option>';
+  }
+  selectPromotion.addEventListener('change', majCours);
+  if (selectPromotion.value) majCours();
+</script>
+<%- include('../partials/footer') %>

@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+<div class="page-header"><h1>Statistiques</h1></div>
+
+<div class="tabs">
+  <a href="/admin/statistiques?session=principale" class="<%= session==='principale'?'active':'' %>">Session principale</a>
+  <a href="/admin/statistiques?session=rattrapage" class="<%= session==='rattrapage'?'active':'' %>">Session de rattrapage</a>
+</div>
+
+<table>
+  <thead><tr><th>Faculté</th><th>Promotion</th><th>Effectif</th><th>Résultats saisis</th><th>Taux de réussite</th><th>Moyenne promotion</th></tr></thead>
+  <tbody>
+    <% stats.forEach(s => { %>
+      <tr>
+        <td><%= s.faculte_nom %></td>
+        <td><%= s.nom %></td>
+        <td><%= s.effectif %></td>
+        <td><%= s.nbAvecResultats %></td>
+        <td>
+          <% const t = parseFloat(s.tauxReussite); %>
+          <span class="badge <%= t >= 60 ? 'badge-success' : (t >= 30 ? 'badge-warning' : 'badge-danger') %>"><%= s.tauxReussite %>%</span>
+        </td>
+        <td><%= s.moyennePromotion %> / 20</td>
+      </tr>
+    <% }) %>
+    <% if (stats.length === 0) { %><tr><td colspan="6">Aucune donnée pour cette année.</td></tr><% } %>
+  </tbody>
+</table>
+<%- include('partials/footer') %>

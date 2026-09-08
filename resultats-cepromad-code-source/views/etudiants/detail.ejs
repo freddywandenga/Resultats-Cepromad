@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+<div class="page-header">
+  <h1><%= etudiant.nom %> <%= etudiant.postnom %> <%= etudiant.prenom %></h1>
+  <div>
+    <a href="/admin/etudiants/<%= etudiant.id %>/modifier" class="btn btn-secondary">Modifier</a>
+    <a href="/releve/<%= etudiant.id %>?nom=<%= encodeURIComponent(etudiant.nom) %>" target="_blank" class="btn">Voir le relevé public</a>
+  </div>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Informations</h3>
+    <p><strong>Matricule :</strong> <%= etudiant.matricule %></p>
+    <p><strong>Sexe :</strong> <%= etudiant.sexe %></p>
+    <p><strong>Faculté :</strong> <%= inscription ? inscription.faculte_nom : '—' %></p>
+    <p><strong>Promotion :</strong> <%= inscription ? inscription.promotion_nom : 'Non inscrit' %></p>
+  </div>
+
+  <div class="card">
+    <h3>Résultats de l'année en cours</h3>
+    <table>
+      <thead><tr><th>Cours</th><th>Crédits</th><th>Note</th><th>Session</th></tr></thead>
+      <tbody>
+        <% resultats.forEach(r => { %>
+          <tr><td><%= r.cours_nom %></td><td><%= r.credits %></td><td><%= r.note %>/<%= r.note_max %></td><td><%= r.session %></td></tr>
+        <% }) %>
+        <% if (resultats.length === 0) { %><tr><td colspan="4">Aucun résultat enregistré.</td></tr><% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/footer') %>

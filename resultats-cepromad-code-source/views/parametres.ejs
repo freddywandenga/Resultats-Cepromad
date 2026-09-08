@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+<div class="page-header"><h1>Paramètres</h1></div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Années académiques</h3>
+    <form method="POST" action="/admin/parametres/annees" class="form-row">
+      <div><label>Nouvelle année (ex: 2027-2028)</label><input type="text" name="libelle" required></div>
+      <div style="align-self:end;"><button type="submit" class="btn">Ajouter</button></div>
+    </form>
+    <p style="font-size:0.8rem; color:var(--muted);">Les facultés, promotions et cours de l'année active sont automatiquement repris pour la nouvelle année.</p>
+    <table>
+      <thead><tr><th>Libellé</th><th>Statut</th><th></th></tr></thead>
+      <tbody>
+        <% annees.forEach(a => { %>
+          <tr>
+            <td><%= a.libelle %></td>
+            <td><% if (a.active) { %><span class="badge badge-success">Active</span><% } %></td>
+            <td>
+              <% if (!a.active) { %>
+                <form method="POST" action="/admin/parametres/annees/<%= a.id %>/activer">
+                  <button class="btn btn-sm" type="submit">Activer</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Utilisateurs administrateurs</h3>
+    <form method="POST" action="/admin/parametres/utilisateurs" class="form-row">
+      <div><label>Nom d'utilisateur</label><input type="text" name="nom_utilisateur" required></div>
+      <div><label>Mot de passe</label><input type="password" name="mot_de_passe" required></div>
+      <div style="align-self:end;"><button type="submit" class="btn">Ajouter</button></div>
+    </form>
+    <table>
+      <thead><tr><th>Utilisateur</th><th>Rôle</th><th></th></tr></thead>
+      <tbody>
+        <% utilisateurs.forEach(u => { %>
+          <tr>
+            <td><%= u.nom_utilisateur %></td>
+            <td><%= u.role %></td>
+            <td>
+              <% if (u.id !== session.userId) { %>
+                <form class="inline" method="POST" action="/admin/parametres/utilisateurs/<%= u.id %>?_method=DELETE" onsubmit="return confirm('Supprimer cet utilisateur ?');">
+                  <button class="btn btn-sm btn-danger" type="submit">Suppr.</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <p style="margin-top:16px;"><a href="/admin/changer-mot-de-passe">Changer mon mot de passe</a></p>
+  </div>
+</div>
+<%- include('partials/footer') %>

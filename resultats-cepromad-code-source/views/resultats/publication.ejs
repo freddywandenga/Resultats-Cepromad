@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1>Publication des résultats</h1></div>
+
+<p style="color:var(--muted); font-size:0.88rem;">
+  Tant qu'une session n'est pas publiée pour une promotion, les étudiants ne peuvent pas consulter leurs résultats pour cette session, même s'ils sont déjà saisis.
+</p>
+
+<table>
+  <thead><tr><th>Faculté</th><th>Promotion</th><th>Session principale</th><th>Session de rattrapage</th></tr></thead>
+  <tbody>
+    <% promotions.forEach(p => { %>
+      <tr>
+        <td><%= p.faculte_nom %></td>
+        <td><%= p.nom %></td>
+        <td>
+          <% if (p.publie_principale) { %><span class="badge badge-success">Publiés</span>
+          <% } else { %><span class="badge badge-muted">Non publiés</span><% } %>
+          <form class="inline" method="POST" action="/admin/resultats/publication/<%= p.id %>/principale/basculer">
+            <button class="btn btn-sm <%= p.publie_principale ? 'btn-secondary' : 'btn-gold' %>" type="submit">
+              <%= p.publie_principale ? 'Dépublier' : 'Publier' %>
+            </button>
+          </form>
+        </td>
+        <td>
+          <% if (p.publie_rattrapage) { %><span class="badge badge-success">Publiés</span>
+          <% } else { %><span class="badge badge-muted">Non publiés</span><% } %>
+          <form class="inline" method="POST" action="/admin/resultats/publication/<%= p.id %>/rattrapage/basculer">
+            <button class="btn btn-sm <%= p.publie_rattrapage ? 'btn-secondary' : 'btn-gold' %>" type="submit">
+              <%= p.publie_rattrapage ? 'Dépublier' : 'Publier' %>
+            </button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (promotions.length === 0) { %><tr><td colspan="4">Aucune promotion pour cette année.</td></tr><% } %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>

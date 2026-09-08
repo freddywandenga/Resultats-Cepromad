@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1>Facultés</h1></div>
+
+<div class="card">
+  <h3>Ajouter une faculté</h3>
+  <form method="POST" action="/admin/facultes" class="form-row">
+    <div><label>Nom</label><input type="text" name="nom" placeholder="ex: Faculté de Droit" required></div>
+    <div><label>Sigle (optionnel)</label><input type="text" name="sigle" placeholder="ex: DROIT"></div>
+    <div style="align-self:end;"><button type="submit" class="btn">Ajouter</button></div>
+  </form>
+</div>
+
+<table>
+  <thead><tr><th>Nom</th><th>Sigle</th><th></th></tr></thead>
+  <tbody>
+    <% facultes.forEach(f => { %>
+      <tr>
+        <td><%= f.nom %></td>
+        <td><%= f.sigle || '—' %></td>
+        <td>
+          <form class="inline" method="POST" action="/admin/facultes/<%= f.id %>?_method=DELETE" onsubmit="return confirm('Supprimer cette faculté ?');">
+            <button class="btn btn-sm btn-danger" type="submit">Suppr.</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (facultes.length === 0) { %><tr><td colspan="3">Aucune faculté.</td></tr><% } %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relevé de notes — <%= etudiant.nom %> <%= etudiant.postnom %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="public-page">
+    <div class="no-print" style="width:100%; max-width:800px; display:flex; justify-content:space-between; margin-bottom:12px;">
+      <a href="/" style="color:#fff; font-size:0.85rem;">← Nouvelle recherche</a>
+      <button onclick="window.print()" class="btn btn-gold">🖨️ Imprimer</button>
+    </div>
+
+    <div class="releve-wrapper">
+      <div class="releve-header">
+        <h2 style="margin-bottom:2px;">UNIVERSITÉ DE CEPROMAD</h2>
+        <p style="color:var(--muted); margin:0;">Relevé de notes — Année académique <%= anneeActive.libelle %></p>
+      </div>
+
+      <div class="grid grid-2">
+        <p><strong>Nom :</strong> <%= etudiant.nom %> <%= etudiant.postnom %> <%= etudiant.prenom %></p>
+        <p><strong>Matricule :</strong> <%= etudiant.matricule %></p>
+        <p><strong>Faculté :</strong> <%= inscription.faculte_nom %></p>
+        <p><strong>Promotion :</strong> <%= inscription.promotion_nom %></p>
+      </div>
+
+      <% blocs.forEach(bloc => { %>
+        <h3 style="margin-top:24px;">Session <%= bloc.session === 'principale' ? 'principale' : 'de rattrapage' %></h3>
+        <table>
+          <thead><tr><th>Cours</th><th>Crédits</th><th>Note</th><th>Sur 20</th></tr></thead>
+          <tbody>
+            <% bloc.resultats.forEach(r => { %>
+              <tr>
+                <td><%= r.cours_nom %></td>
+                <td><%= r.credits %></td>
+                <td><%= r.note %>/<%= r.note_max %></td>
+                <td><%= ((r.note / r.note_max) * 20).toFixed(2) %></td>
+              </tr>
+            <% }) %>
+            <% if (bloc.resultats.length === 0) { %><tr><td colspan="4">Aucun résultat saisi pour cette session.</td></tr><% } %>
+          </tbody>
+        </table>
+        <div class="releve-total">
+          Moyenne générale : <%= bloc.moyenne || '—' %> / 20
+          &nbsp;•&nbsp; Crédits obtenus : <%= bloc.creditsObtenus %> / <%= bloc.totalCredits %>
+        </div>
+        <% if (bloc.decision) { %>
+          <div style="text-align:center;">
+            <span class="decision-badge <%= bloc.decision === 'RÉUSSI(E)' ? 'badge-success' : 'badge-danger' %>"><%= bloc.decision %></span>
+          </div>
+        <% } %>
+        <p style="text-align:right; color:var(--muted); font-size:0.75rem;">Publié le <%= new Date(bloc.datePublication).toLocaleDateString('fr-FR') %></p>
+      <% }) %>
+
+      <% if (blocs.length === 0) { %>
+        <div class="no-publication">
+          Les résultats de votre promotion n'ont pas encore été publiés pour l'année académique <%= anneeActive.libelle %>.<br>
+          Veuillez réessayer ultérieurement.
+        </div>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

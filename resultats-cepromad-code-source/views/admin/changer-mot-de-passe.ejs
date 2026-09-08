@@ -1,0 +1,16 @@
+<%- include('../partials/header') %>
+<div class="page-header"><h1>Changer le mot de passe</h1></div>
+<div class="card" style="max-width:400px;">
+  <% if (erreur) { %><div class="error-msg"><%= erreur %></div><% } %>
+  <% if (succes) { %><div class="success-msg"><%= succes %></div><% } %>
+  <form method="POST" action="/admin/changer-mot-de-passe">
+    <label>Ancien mot de passe</label>
+    <input type="password" name="ancien" required>
+    <label>Nouveau mot de passe</label>
+    <input type="password" name="nouveau" required>
+    <label>Confirmer le nouveau mot de passe</label>
+    <input type="password" name="confirmation" required>
+    <button type="submit" class="btn">Enregistrer</button>
+  </form>
+</div>
+<%- include('../partials/footer') %>

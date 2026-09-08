@@ -1,0 +1,38 @@
+<%- include('../partials/header') %>
+<div class="page-header">
+  <h1>Étudiants</h1>
+  <a href="/admin/etudiants/nouveau" class="btn">+ Nouvel étudiant</a>
+</div>
+
+<form class="search-bar" method="GET" action="/admin/etudiants">
+  <input type="text" name="q" placeholder="Rechercher (nom, matricule...)" value="<%= q %>">
+  <select name="promotion_id">
+    <option value="">Toutes les promotions</option>
+    <% promotions.forEach(p => { %>
+      <option value="<%= p.id %>" <%= String(promotionId) === String(p.id) ? 'selected' : '' %>><%= p.faculte_nom %> — <%= p.nom %></option>
+    <% }) %>
+  </select>
+  <button class="btn" type="submit">Filtrer</button>
+</form>
+
+<table>
+  <thead><tr><th>Matricule</th><th>Nom</th><th>Sexe</th><th>Promotion</th><th></th></tr></thead>
+  <tbody>
+    <% etudiants.forEach(e => { %>
+      <tr>
+        <td><%= e.matricule %></td>
+        <td><a href="/admin/etudiants/<%= e.id %>"><%= e.nom %> <%= e.postnom %> <%= e.prenom %></a></td>
+        <td><%= e.sexe %></td>
+        <td><%= e.promotion_nom ? e.faculte_nom + ' — ' + e.promotion_nom : '—' %></td>
+        <td>
+          <a href="/admin/etudiants/<%= e.id %>/modifier" class="btn btn-sm btn-secondary">Modifier</a>
+          <form class="inline" method="POST" action="/admin/etudiants/<%= e.id %>?_method=DELETE" onsubmit="return confirm('Supprimer cet étudiant ?');">
+            <button class="btn btn-sm btn-danger" type="submit">Suppr.</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+    <% if (etudiants.length === 0) { %><tr><td colspan="5">Aucun étudiant trouvé.</td></tr><% } %>
+  </tbody>
+</table>
+<%- include('../partials/footer') %>
